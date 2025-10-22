@@ -24,3 +24,4 @@ ftfy
 pandas
 tqdm
 datasets
+modelscope
