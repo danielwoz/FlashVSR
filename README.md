@@ -1,3 +1,15 @@
+This is a fork that less particular about versions, works with more modern software, and is updated for blackwell.
+git clone https://github.com/danielwoz/FlashVSR.git
+python setup.py bdist_wheels
+python setup.py install
+
+You will also want my updated version of block_sparse_attn:
+git clone --recurse-submodules https://github.com/danielwoz/Block-Sparse-Attention.git
+MAX_JOBS=4 python setup.py bdist_wheels
+MAX_JOBS=4 python setup.py install
+Block sparse attention is mostly the flash attention code base with some modifications, if your having trouble building it, search for flash-attn and your error message.
+
+
 # ⚡ FlashVSR
 
 **Towards Real-Time Diffusion-Based Streaming Video Super-Resolution**
