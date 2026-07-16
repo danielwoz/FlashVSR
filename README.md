@@ -5,7 +5,8 @@
 **Authors:** Junhao Zhuang, Shi Guo, Xin Cai, Xiaohui Li, Yihao Liu, Chun Yuan, Tianfan Xue
 
 <a href='http://zhuang2002.github.io/FlashVSR'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;
-<a href="https://huggingface.co/JunhaoZhuang/FlashVSR"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue"></a> &nbsp;
+<a href="https://huggingface.co/JunhaoZhuang/FlashVSR"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20(v1)-blue"></a> &nbsp;
+<a href="https://huggingface.co/JunhaoZhuang/FlashVSR-v1.1"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20(v1.1)-blue"></a> &nbsp;
 <a href="https://huggingface.co/datasets/JunhaoZhuang/VSR-120K"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-orange"></a> &nbsp;
 <a href="https://arxiv.org/abs/2510.12747"><img src="https://img.shields.io/badge/arXiv-2510.12747-b31b1b.svg"></a>
 
@@ -23,10 +24,33 @@ Diffusion models have recently advanced video restoration, but applying them to 
 
 ### 📰 News
 
-- **Release Date:** October 2025 — Inference code and model weights are available now! 🎉  
+- **Nov 2025 — 🎉 [FlashVSR v1.1](https://huggingface.co/JunhaoZhuang/FlashVSR-v1.1) released:** enhanced stability + fidelity  
+- **Oct 2025 — [FlashVSR v1](https://huggingface.co/JunhaoZhuang/FlashVSR)  (initial release)**: Inference code and model weights are available now! 🎉  
 - **Bug Fix (October 21, 2025):** Fixed `local_attention_mask` update logic to prevent artifacts when switching between different aspect ratios during continuous inference.  
 - **Coming Soon:** Dataset release (**VSR-120K**) for large-scale training.
 
+---
+### 🌐 Community Integrations
+
+Thanks to the community for the fast adoption of FlashVSR! Below are some third-party integrations:
+
+**ComfyUI Support**
+- **[smthemex/ComfyUI_FlashVSR](https://github.com/smthemex/ComfyUI_FlashVSR)** — closer to the official implementation  
+- **[lihaoyun6/ComfyUI-FlashVSR_Ultra_Fast](https://github.com/lihaoyun6/ComfyUI-FlashVSR_Ultra_Fast)** — modified attention behavior, easier installation, and added `tile_dit`; I have not personally tested this version
+- **[naxci1/ComfyUI-FlashVSR_Stable](https://github.com/naxci1/ComfyUI-FlashVSR_Stable)** — community-maintained stable ComfyUI implementation with VRAM optimizations
+- **WanVideoWrapper** — integrated support but currently has known issues  
+  https://github.com/kijai/ComfyUI-WanVideoWrapper/issues/1441
+
+**Cloud / API Deployments**  
+(These third-party services offer ready-to-use online inference, making it easy to try FlashVSR without any setup or GPU requirements. However, it’s unclear whether they run v1 or v1.1 or whether the full pipeline is implemented, so results may differ from the official version. 🤷‍♂️ For the most accurate and complete reproduction, we recommend using the official repository when possible.)
+
+- fal.ai: https://fal.ai/models/fal-ai/flashvsr/upscale/video  
+- WaveSpeed AI: https://wavespeed.ai/models/wavespeed-ai/flashvsr  
+- Segmind: https://www.segmind.com/models/flashvsr  
+- Genbo AI: https://genbo.ai/models/toVideo/Flash-VSR
+- JAI Portal: https://www.jaiportal.com/model/flashvsr  
+- FlashVSR Online Service (third-party): https://flashvsr.org  
+- GigapixelAI Video Upscaler (FlashVSR option): https://gigapixelai.com/ai-video-upscaler
 ---
 
 ### 📢 Important Quality Note (ComfyUI & other third-party implementations)
@@ -44,8 +68,6 @@ Below is a comparison example provided by a community member:
 ✅ The **official FlashVSR pipeline (this repository)**:
 - **Better preserves fine structures and details**
 - **Effectively avoids texture aliasing and visual artifacts**
-
-We are also working on a **version that does not rely on the Block-Sparse Attention library** while keeping **the same output quality**; this alternative may run slower than the optimized original implementation.
 
 Thanks again to the community for actively testing and helping improve FlashVSR together! 🚀
 
@@ -109,7 +131,8 @@ python setup.py install
 
 #### 4️⃣ Download Model Weights from Hugging Face
 
-Weights are hosted on **Hugging Face** via **Git LFS**. Please install Git LFS first:
+FlashVSR provides both **v1** and **v1.1** model weights on Hugging Face (via **Git LFS**).  
+Please install Git LFS first:
 
 ```bash
 # From the repo root
@@ -118,32 +141,48 @@ cd examples/WanVSR
 # Install Git LFS (once per machine)
 git lfs install
 
-# Clone the model repository into examples/WanVSR
-git lfs clone https://huggingface.co/JunhaoZhuang/FlashVSR
+# Clone v1 (original) or v1.1 (recommended)
+git lfs clone https://huggingface.co/JunhaoZhuang/FlashVSR          # v1
+# or
+git lfs clone https://huggingface.co/JunhaoZhuang/FlashVSR-v1.1      # v1.1
 ```
 
-After cloning, you should have:
+After cloning, you should have one of the following folders:
 
 ```
-./examples/WanVSR/FlashVSR/
+./examples/WanVSR/FlashVSR/          # v1
+./examples/WanVSR/FlashVSR-v1.1/     # v1.1
 │
-├── LQ_proj_in.ckpt                                   
-├── TCDecoder.ckpt                                    
-├── Wan2.1_VAE.pth                                    
-├── diffusion_pytorch_model_streaming_dmd.safetensors 
+├── LQ_proj_in.ckpt
+├── TCDecoder.ckpt
+├── Wan2.1_VAE.pth
+├── diffusion_pytorch_model_streaming_dmd.safetensors
 └── README.md
 ```
 
-> The inference scripts will load weights from `./examples/WanVSR/FlashVSR/` by default.
+> Inference scripts automatically load weights from the corresponding folder.
+
+---
 
 #### 5️⃣ Run Inference
 
 ```bash
 # From the repo root
 cd examples/WanVSR
-python infer_flashvsr_full.py      # Full model
+
+# v1 (original)
+python infer_flashvsr_full.py
 # or
-python infer_flashvsr_tiny.py      # Tiny model
+python infer_flashvsr_tiny.py
+# or
+python infer_flashvsr_tiny_long_video.py
+
+# v1.1 (recommended)
+python infer_flashvsr_v1.1_full.py
+# or
+python infer_flashvsr_v1.1_tiny.py
+# or
+python infer_flashvsr_v1.1_tiny_long_video.py
 ```
 
 ---
@@ -187,13 +226,10 @@ We gratefully acknowledge the following open-source projects:
 ### 📜 Citation
 
 ```bibtex
-@misc{zhuang2025flashvsrrealtimediffusionbasedstreaming,
-      title={FlashVSR: Towards Real-Time Diffusion-Based Streaming Video Super-Resolution}, 
-      author={Junhao Zhuang and Shi Guo and Xin Cai and Xiaohui Li and Yihao Liu and Chun Yuan and Tianfan Xue},
-      year={2025},
-      eprint={2510.12747},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2510.12747}, 
+@article{zhuang2025flashvsr,
+  title={FlashVSR: Towards Real-Time Diffusion-Based Streaming Video Super-Resolution},
+  author={Zhuang, Junhao and Guo, Shi and Cai, Xin and Li, Xiaohui and Liu, Yihao and Yuan, Chun and Xue, Tianfan},
+  journal={arXiv preprint arXiv:2510.12747},
+  year={2025}
 }
 ```
